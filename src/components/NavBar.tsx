@@ -1,7 +1,9 @@
 import { Link, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/AuthProvider';
 
 const Navbar = () => {
-  const auth = undefined;
+  const {isAuthenticated, logout} = useAuth();
+  const user = localStorage.getItem('user');
 
   return (
     <>
@@ -19,21 +21,21 @@ const Navbar = () => {
       >
         <div>
           <h2 style={{ margin: 0 }}>
-            <a style={{ textDecoration: 'none', color: 'white' }} href={!auth ? '/login' : '/'}> 
+            <a style={{ textDecoration: 'none', color: 'white' }} href={!isAuthenticated ? '/login' : '/'}> 
               Author's oasis
             </a>
           </h2>
           <span>
             <a style={{ textDecoration: 'none', color: 'white' }} href="/">
-              {auth && 'My Post' }
+              {isAuthenticated && 'My Post' }
             </a>
           </span>
         </div>
 
-        {typeof auth != 'undefined' ? (
+        {isAuthenticated ? (
           <div style={{display: 'flex', flexDirection: 'row', alignContent: 'center', justifyContent: 'center', gap: '10px'}}>
-            <span>Welcome {undefined}!</span>
-            <button onClick={() => {}} className="btn-submit" style={{width: 'fit-content', height: 'fit-content'}}>
+            <span>Welcome {user}!</span>
+            <button onClick={() => logout()} className="btn-submit" style={{width: 'fit-content', height: 'fit-content'}}>
               logout
             </button>
           </div>
