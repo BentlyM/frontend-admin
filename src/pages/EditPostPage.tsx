@@ -1,39 +1,56 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PostUpdateForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isPublished, setIsPublished] = useState(false);
-  const [err , setError] = useState('');
-  const {id} = useParams();
+  const [err, setError] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if(title == '' && content == '' && !isPublished){return setError('all fields cant be blank')};
+    if (title == '' && content == '' && !isPublished) {
+      return setError('all fields cant be blank');
+    }
+    console.log(
+      JSON.stringify({
+        title: title,
+        content: content,
+        published: isPublished,
+      })
+    );
 
     try {
-        const res = await fetch(`https://backend-uoiu.onrender.com/api/posts/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                title: title,
-                content: content,
-                published: isPublished,
-            })
-        })
-
-        if(!res.ok) throw new Error('Error fetching data');
-
-        const data = await res.json();
-
-        console.log(data);
-    }catch(e){
-        if(e instanceof Error){
-            console.log(e.message);
+      const res = await fetch(
+        `https://backend-uoiu.onrender.com/api/posts/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${localStorage.getItem('jwt')}`,
+          },
+          body: JSON.stringify({
+            title: title,
+            content: content,
+            published: isPublished,
+          }),
         }
+      );
+
+      if (!res.ok) throw new Error('Error fetching data');
+
+      const data = await res.json();
+
+      console.log(data);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      }
     }
-    console.log('Post updated:', { title, content, isPublished });
+    return navigate('/');
   };
 
   return (
@@ -70,8 +87,8 @@ const PostUpdateForm = () => {
           }}
         />
       </label>
-      <br/>
-      <span style={{color: 'red'}}>{err}</span>
+      <br />
+      <span style={{ color: 'red' }}>{err}</span>
       <br />
       <button type="submit">Update Post</button>
     </form>
@@ -80,7 +97,14 @@ const PostUpdateForm = () => {
 
 const EditPostPage = () => {
   return (
-    <div style={{width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+    <div
+      style={{
+        width: '100vw',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <div
         style={{
           display: 'flex',
