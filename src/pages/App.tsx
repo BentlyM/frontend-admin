@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import PostCard from '../components/PostCard';
-import placeholder from '../dummy/dummy';
 import { useAuth } from '../hooks/AuthProvider';
 import { useEffect, useState } from 'react';
 
@@ -8,7 +7,7 @@ interface Post {
   id: number;
   title: string;
   content: string;
-  author: author;
+  author: { username: string };
 }
 
 function App() {
@@ -47,8 +46,12 @@ function App() {
     })();
   }, [isAuthenticated, navigate]);
 
-  if(loading) return <span>Loading...</span>;
-  if(err !== '') return <span>{err}</span>;
+  if (loading) return <span>Loading...</span>;
+  if (err !== '') return <span>{err}</span>;
+
+  const handleDelete = (id: number) => {
+    setPosts(posts.filter((post) => post.id !== id));
+  };
 
   return (
     <div
@@ -67,7 +70,9 @@ function App() {
       >
         <h2>My Posts</h2>
         {posts.length > 0 ? (
-          posts.map((post) => <PostCard {...post} key={post.id} />)
+          posts.map((post) => (
+            <PostCard {...post} key={post.id} onDelete={handleDelete} />
+          ))
         ) : (
           <div>No posts...</div>
         )}{' '}

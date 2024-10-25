@@ -5,6 +5,7 @@ import Register from '../pages/Register';
 import EditPostPage from '../pages/EditPostPage';
 import App from '../pages/App';
 import AuthProvider from '../hooks/AuthProvider';
+import AddPostPage from '../pages/AddPostPage';
 
 interface Route {
   path?: string;
@@ -38,6 +39,10 @@ const routes: Route[] = [
         path: '/edit-post/:id',
         element: <EditPostPage />,
       },
+      {
+        path: '/add',
+        element: <AddPostPage />
+      }
     ],
   },
 ];

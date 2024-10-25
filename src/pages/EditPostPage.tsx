@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const PostUpdateForm = () => {
@@ -6,8 +6,20 @@ const PostUpdateForm = () => {
   const [content, setContent] = useState('');
   const [isPublished, setIsPublished] = useState(false);
   const [err, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`https://backend-uoiu.onrender.com/api/posts/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTitle(data.title);
+        setContent(data.content);
+        setIsPublished(data.published);
+        setIsLoading(false);
+      });
+  }, [id]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -63,6 +75,7 @@ const PostUpdateForm = () => {
           onChange={(event) => {
             setTitle(event.target.value);
           }}
+          disabled={isLoading}
         />
       </label>
       <br />
@@ -74,6 +87,7 @@ const PostUpdateForm = () => {
           onChange={(event) => {
             setContent(event.target.value);
           }}
+          disabled={isLoading}
         />
       </label>
       <br />
@@ -85,6 +99,7 @@ const PostUpdateForm = () => {
           onChange={(event) => {
             setIsPublished(event.target.checked);
           }}
+          disabled={isLoading}
         />
       </label>
       <br />

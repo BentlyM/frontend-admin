@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
 
 const Navbar = () => {
-  const {isAuthenticated, logout} = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const user = localStorage.getItem('user');
 
   return (
@@ -21,21 +21,55 @@ const Navbar = () => {
       >
         <div>
           <h2 style={{ margin: 0 }}>
-            <a style={{ textDecoration: 'none', color: 'white' }} href={!isAuthenticated ? '/login' : '/'}> 
+            <a
+              style={{ textDecoration: 'none', color: 'white' }}
+              href={!isAuthenticated ? '/login' : '/'}
+            >
               Author's oasis
             </a>
           </h2>
           <span>
-            <a style={{ textDecoration: 'none', color: 'white' }} href="/">
-              {isAuthenticated && 'My Post' }
-            </a>
+            <ul
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                gap: '5%'
+              }}
+            >
+              <li>
+                <a style={{ textDecoration: 'none', color: 'white' }} href="/">
+                  {isAuthenticated && 'My Post'}
+                </a>
+              </li>
+              <li>
+                <a style={{ textDecoration: 'none', color: 'white' }} href="/add">
+                  {isAuthenticated && 'Add Post'}
+                </a>
+              </li>
+            </ul>
           </span>
         </div>
 
         {isAuthenticated ? (
-          <div style={{display: 'flex', flexDirection: 'row', alignContent: 'center', justifyContent: 'center', gap: '10px'}}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignContent: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+            }}
+          >
             <span>Welcome {user}!</span>
-            <button onClick={() => logout()} className="btn-submit" style={{width: 'fit-content', height: 'fit-content'}}>
+            <button
+              onClick={() => logout()}
+              className="btn-submit"
+              style={{ width: 'fit-content', height: 'fit-content' }}
+            >
               logout
             </button>
           </div>
